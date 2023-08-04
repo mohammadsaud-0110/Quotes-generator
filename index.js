@@ -16,6 +16,10 @@ const openai = new OpenAIApi(configuration);
 app.use(express.json());
 app.use(cors());
 
+app.get("/", (req,res)=>{
+  res.send("Default Route, server running fine")
+})
+
 // API endpoint to generate quotes
 app.post('/generate-quote', async (req, res) => {
   try {
@@ -25,36 +29,36 @@ app.post('/generate-quote', async (req, res) => {
     const prompt = `Generate a quote about "${keyword}"`;
 
     try {
-    //   const response = await axios.post(
-    //     'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions',
-    //     {
-    //       prompt,
-    //       max_tokens: 50,
-    //       n: 1,
-    //       temperature: 0.7,
-    //     },
-    //     {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${openaiApiKey}`,
-    //       },
-    //     }
-    //   );
+      const response = await axios.post(
+        'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions',
+        {
+          prompt,
+          max_tokens: 50,
+          n: 1,
+          temperature: 0.7,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${openaiApiKey}`,
+          },
+        }
+      );
   
-    //   const quote = response.data.choices[0].text.trim();
-    //   res.json({ quote });
-                const response = await openai.createCompletion({
-                    model: 'gpt-3.5-turbo',
-                    prompt: prompt,
-                    temperature: 0,
-                    top_p: 1,
-                    frequency_penalty: 0,
-                    presence_penalty: 0,
-                    max_tokens: 1024
-                })
-                response.then(async (data)=>{
-                    res.json(data)
-                })
+      const quote = response.data.choices[0].text.trim();
+      res.json({ quote });
+                // const response = await openai.createCompletion({
+                //     model: 'gpt-3.5-turbo',
+                //     prompt: prompt,
+                //     temperature: 0,
+                //     top_p: 1,
+                //     frequency_penalty: 0,
+                //     presence_penalty: 0,
+                //     max_tokens: 1024
+                // })
+                // response.then(async (data)=>{
+                //     res.json(data)
+                // })
     } 
     catch (error) {
       console.error('OpenAI API request failed:', error.response?.data || error.message);

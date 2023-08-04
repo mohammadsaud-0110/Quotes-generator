@@ -8,7 +8,7 @@ async function getQuote() {
     }
   
     try {
-      const response = await fetch('/generate-quote', {
+      const response = await fetch('https://quote-gen-backend.onrender.com/generate-quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
