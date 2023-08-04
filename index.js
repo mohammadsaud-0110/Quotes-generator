@@ -6,8 +6,8 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.port || 4700;
-const openaiApiKey = process.env.openAI
+const port = process.env.PORT || 4700;
+const openaiApiKey = process.env.OPENAI_API_KEY
 
 const configuration = new Configuration({apiKey : openaiApiKey});
 const openai = new OpenAIApi(configuration);
@@ -26,11 +26,11 @@ app.post('/generate-quote', async (req, res) => {
     const keyword = req.body.keyword;
 
     // Use the generateQuote function to fetch a quote using the OpenAI API
-    const prompt = `Generate a quote about "${keyword}"`;
+    const prompt = `Generate a inspirational or motivational quote about "${keyword}"`;
 
     try {
       const response = await axios.post(
-        'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions',
+        'https://api.openai.com/v1/engines/text-davinci-003/completions',
         {
           prompt,
           max_tokens: 50,
@@ -47,6 +47,8 @@ app.post('/generate-quote', async (req, res) => {
   
       const quote = response.data.choices[0].text.trim();
       res.json({ quote });
+
+      //----------------------------------------------------------------------------------------------
                 // const response = await openai.createCompletion({
                 //     model: 'gpt-3.5-turbo',
                 //     prompt: prompt,
@@ -54,14 +56,29 @@ app.post('/generate-quote', async (req, res) => {
                 //     top_p: 1,
                 //     frequency_penalty: 0,
                 //     presence_penalty: 0,
-                //     max_tokens: 1024
+                //     max_tokens: 200
                 // })
                 // response.then(async (data)=>{
                 //     res.json(data)
                 // })
+      //-----------------------------------------------------------------------
+                // const response = await openai.createCompletion({
+                //   model: 'gpt-3.5-turbo',
+                //   prompt: prompt,
+                //   max_tokens: 200
+                // });
+            
+                // // Check if the response contains any error
+                // if (response.error) {
+                //   console.error('OpenAI API error:', response.error.message);
+                //   throw new Error('Failed to generate a quote.');
+                // }
+            
+                // const quote = response.data.choices[0].text.trim();
+                // return quote;
     } 
     catch (error) {
-      console.error('OpenAI API request failed:', error.response?.data || error.message);
+      // console.error('OpenAI API request failed:', error.response?.data || error.message);
       res.json({error})
     }
   } 
