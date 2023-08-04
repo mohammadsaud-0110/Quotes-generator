@@ -33,9 +33,7 @@ app.post('/generate-quote', async (req, res) => {
         'https://api.openai.com/v1/engines/text-davinci-003/completions',
         {
           prompt,
-          max_tokens: 50,
-          n: 1,
-          temperature: 0.7,
+          max_tokens: 50
         },
         {
           headers: {
